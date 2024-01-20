@@ -51,7 +51,7 @@ char	*find_last_node(t_buffer *list)
 		return (NULL);
 	while (list->next)
 		list = list->next;
-	return (list -> data);
+	return (list -> content);
 }
 
 int	len_to_newline(t_buffer *list)
@@ -65,9 +65,9 @@ int	len_to_newline(t_buffer *list)
 	while (list)
 	{
 		i = 0;
-		while (list->data[i])
+		while (list -> content[i])
 		{
-			if (list->data[i] == '\n')
+			if (list -> content[i] == '\n')
 			{
 				++len;
 				return (len);
@@ -80,7 +80,6 @@ int	len_to_newline(t_buffer *list)
 	return (len);
 }
 
-
 void	copy_str(t_buffer *list, char *str)
 {
 	int	i;
@@ -92,42 +91,42 @@ void	copy_str(t_buffer *list, char *str)
 	while (list)
 	{
 		i = 0;
-		while (list->data[i])
+		while (list->content[i])
 		{
-			if (list->data[i] == '\n')
+			if (list->content[i] == '\n')
 			{
 				str[k++] = '\n';
 				str[k] = '\0';
 				return ;
 			}
-			str[k++] = list->data[i++];
+			str[k++] = list->content[i++];
 		}
 		list = list->next;
 	}
 	str[k] = '\0';
 }
 
-#include <stdio.h>
+// #include <stdio.h>
 
-int main(void) {
-    int fd;
-    char *line;
+// int main(void) {
+//     int fd;
+//     char *line;
 
-    // Open a file for testing
-    fd = open("test_file.txt", O_RDONLY);
-    if (fd == -1) {
-        return 1;
-    }
+//     // Open a file for testing
+//     fd = open("test_file.txt", O_RDONLY);
+//     if (fd == -1) {
+//         return 1;
+//     }
 
-    // Read and print lines using get_next_line
-    while ((line = get_next_line(fd)) != NULL) {
-        printf("%s\n", line);
-        free(line);  // Free the allocated memory for each line
-    }
+//     // Read and print lines using get_next_line
+//     while ((line = get_next_line(fd)) != NULL) {
+//         printf("%s\n", line);
+//         free(line);  // Free the allocated memory for each line
+//     }
 
-    // Close the file
-    close(fd);
+//     // Close the file
+//     close(fd);
 
-    return 0;
-}
+//     return 0;
+// }
 

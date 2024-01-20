@@ -22,7 +22,7 @@ void append_node(t_buffer **head, const char *str_buf) {
         return;
     
     // Duplicate the string before storing it in the node
-    new_node->data = ft_strdup(str_buf);  
+    new_node->content = ft_strdup(str_buf);  
     new_node->next = NULL;
 
     if (*head == NULL)
@@ -78,7 +78,7 @@ char	*get_line(t_buffer *list)
 	return (next_str);
 }
 
-t_buffer *deallocate_list(t_buffer **list, char *last_node)
+void deallocate_list(t_buffer **list, char *last_node)
 {
     t_buffer *new_list;
     char *rest;
@@ -86,18 +86,24 @@ t_buffer *deallocate_list(t_buffer **list, char *last_node)
     rest = ft_strchr(last_node, '\n');
     if (rest == NULL)
     {
-        // Handle case where newline is not found
-        return NULL;
+        while (*list != NULL)
+        {
+            t_buffer *temp = *list;
+            *list = (*list)->next;
+            free(temp->content);
+            free(temp);
+        }
+        return;
     }
 
     new_list = malloc(sizeof(t_buffer));
     if (new_list == NULL)
     {
         // Handle memory allocation failure
-        return NULL;
+        return;
     }
 
-    new_list->data = ft_strdup(rest + 1); // Move past the newline
+    new_list->content = ft_strdup(rest + 1); // Move past the newline
     new_list->next = NULL;
 
     // Clean the previous list and free the memory
@@ -105,19 +111,19 @@ t_buffer *deallocate_list(t_buffer **list, char *last_node)
     {
         t_buffer *temp = *list;
         *list = (*list)->next;
-        free(temp->data);
+        free(temp->content);
         free(temp);
     }
 
-    return new_list;
+    *list = new_list; // Update the external list
 }
+
 
 char *get_next_line(int fd)
 {
     static t_buffer *list = NULL;
     char *next_line;
     char *last_node;
-
 
     if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
         return NULL;
@@ -129,7 +135,7 @@ char *get_next_line(int fd)
     next_line = get_line(list);
 
     // Update the list by deallocating nodes
-    list = deallocate_list(&list, last_node);
+    deallocate_list(&list, last_node);
 
     return next_line;
 }

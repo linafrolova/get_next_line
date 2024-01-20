@@ -24,7 +24,7 @@
 
 typedef struct s_buffer
 {
-    char *data;
+    char *content;
     struct s_buffer *next;
 } t_buffer;
 
@@ -36,7 +36,7 @@ void	    copy_str(t_buffer *list, char *str);
 void	    append_node(t_buffer **head, const char *str_buf);
 void        create_list(t_buffer **list, int fd);
 char	    *get_line(t_buffer *list);
-t_buffer    *deallocate_list(t_buffer **list, char *last_node);
+void deallocate_list(t_buffer **list, char *last_node);
 char        *get_next_line(int fd);
 
 #endif
