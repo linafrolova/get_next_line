@@ -13,15 +13,15 @@
 
 #include "get_next_line.h"
 
-void append_node(t_buffer **head, const char *str_buf) {
+
+void append_node(t_buffer **head, const char *str_buf) 
+{
     t_buffer *last_node;
     t_buffer *new_node;
 
     new_node = malloc(sizeof(t_buffer));
     if (new_node == NULL)
         return;
-    
-    // Duplicate the string before storing it in the node
     new_node->content = ft_strdup(str_buf);  
     new_node->next = NULL;
 
@@ -42,10 +42,8 @@ void create_list(t_buffer **list, int fd)
     char *buffer;
 
     buffer = malloc(BUFFER_SIZE + 1);
-        if (!buffer) {
+        if (!buffer)
             return ;
-        }
-
     while (!foundNewline && (bytesRead = read(fd, buffer, BUFFER_SIZE)) > 0) 
     {
         buffer[bytesRead] = '\0';
@@ -56,7 +54,6 @@ void create_list(t_buffer **list, int fd)
             /*newlinePos = '\n';*/
             foundNewline = 1;
         }
-
         append_node(list, buffer);
     }
     free(buffer);
@@ -78,52 +75,53 @@ char	*get_line(t_buffer *list)
 	return (next_str);
 }
 
-void deallocate_list(t_buffer **list, char *last_node)
-{
-    t_buffer *new_list;
-    char *rest;
+void deallocate_list(t_buffer **list, t_buffer *last_node) {
+    char *buf = malloc(BUFFER_SIZE + 1);
+    t_buffer *clean_node = malloc(sizeof(t_buffer));
 
-    rest = ft_strchr(last_node, '\n');
-    if (rest == NULL)
-    {
-        while (*list != NULL)
-        {
-            t_buffer *temp = *list;
-            *list = (*list)->next;
-            free(temp->content);
-            free(temp);
-        }
+    if (NULL == buf || NULL == clean_node)
         return;
+
+    int i = 0;
+    int k = 0;
+
+    while (last_node->content[i] && last_node->content[i] != '\n')
+        ++i;
+
+    while (last_node->content[i] && last_node->content[++i])
+        buf[k++] = last_node->content[i];
+
+    buf[k] = '\0';
+
+    clean_node->content = buf;
+    clean_node->next = NULL;
+
+    t_buffer *tmp;
+
+    while (*list) {
+        tmp = (*list)->next;
+        free((*list)->content);
+        free(*list);
+        *list = tmp;
     }
 
-    new_list = malloc(sizeof(t_buffer));
-    if (new_list == NULL)
-    {
-        // Handle memory allocation failure
-        return;
+    *list = NULL;
+
+    if (clean_node->content[0])
+        *list = clean_node;
+    else {
+        free(buf);
+        free(clean_node);
     }
-
-    new_list->content = ft_strdup(rest + 1); // Move past the newline
-    new_list->next = NULL;
-
-    // Clean the previous list and free the memory
-    while (*list != NULL)
-    {
-        t_buffer *temp = *list;
-        *list = (*list)->next;
-        free(temp->content);
-        free(temp);
-    }
-
-    *list = new_list; // Update the external list
 }
+
 
 
 char *get_next_line(int fd)
 {
     static t_buffer *list = NULL;
     char *next_line;
-    char *last_node;
+    t_buffer *last_node;
 
     if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
         return NULL;

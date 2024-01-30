@@ -45,13 +45,13 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*find_last_node(t_buffer *list)
+t_buffer	*find_last_node(t_buffer *list)
 {
 	if (NULL == list)
 		return (NULL);
 	while (list->next)
 		list = list->next;
-	return (list -> content);
+	return (list);
 }
 
 int	len_to_newline(t_buffer *list)
@@ -105,28 +105,3 @@ void	copy_str(t_buffer *list, char *str)
 	}
 	str[k] = '\0';
 }
-
-// #include <stdio.h>
-
-// int main(void) {
-//     int fd;
-//     char *line;
-
-//     // Open a file for testing
-//     fd = open("test_file.txt", O_RDONLY);
-//     if (fd == -1) {
-//         return 1;
-//     }
-
-//     // Read and print lines using get_next_line
-//     while ((line = get_next_line(fd)) != NULL) {
-//         printf("%s\n", line);
-//         free(line);  // Free the allocated memory for each line
-//     }
-
-//     // Close the file
-//     close(fd);
-
-//     return 0;
-// }
-
