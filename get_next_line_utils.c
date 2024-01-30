@@ -4,54 +4,40 @@ char	*ft_strdup(const char *s)
 {
 	int		i;
 	char	*dest;
-	// Calculate the length of the input string
+
 	i = 0;
 	while (s[i] != '\0')
 		i++;
-
-	// Allocate memory for the destination string
 	dest = (char *)malloc((i + 1) * sizeof(char));
-	// Check if memory allocation was successful
 	if (!dest)
 		return (NULL);
-	// Copy the characters from the source to the destination
 	i = 0;
 	while (s[i] != '\0')
 	{
 		dest[i] = s[i];
 		i++;
 	}
-	// Add the null terminator to the destination string
 	dest[i] = '\0';
-	// Return the pointer to the duplicated string
 	return (dest);
 }
 
-char	*ft_strchr(const char *s, int c)
+int found_newline(t_buffer *list) 
 {
-	unsigned int	i;
-	char			cc;
-
-	i = 0;
-	cc = (char) c;
-	while (s[i] != '\0')
+	char *ptr;
+    if (list == NULL)
+        return (0);
+    while (list) 
 	{
-		if (s[i] == cc)
-			return ((char *) s + i);
-		i++;
-	}
-	if (cc == '\0')
-		return ((char *) s + i);
-	return (NULL);
-}
-
-t_buffer	*find_last_node(t_buffer *list)
-{
-	if (NULL == list)
-		return (NULL);
-	while (list->next)
-		list = list->next;
-	return (list);
+        ptr = list->content;
+        while (*ptr != '\0') 
+		{
+            if (*ptr == '\n')
+                return (1);
+            ptr++;
+        }
+        list = list->next;
+    }
+    return (0);
 }
 
 int	len_to_newline(t_buffer *list)
@@ -80,7 +66,6 @@ int	len_to_newline(t_buffer *list)
 	return (len);
 }
 
-
 void	copy_str(t_buffer *list, char *str)
 {
 	int	i;
@@ -105,4 +90,27 @@ void	copy_str(t_buffer *list, char *str)
 		list = list->next;
 	}
 	str[k] = '\0';
+}
+
+void append_node(t_buffer **head, const char *str_buf) 
+{
+    t_buffer *last_node;
+    t_buffer *new_node;
+
+    if (head == NULL)
+        return ;
+    new_node = malloc(sizeof(t_buffer));
+    if (new_node == NULL)
+        return ;
+    new_node->content = ft_strdup(str_buf);  
+    new_node->next = NULL;
+    if (*head == NULL)
+        *head = new_node;
+    else 
+	{
+        last_node = *head;
+        while (last_node->next != NULL)
+            last_node = last_node->next;
+        last_node->next = new_node;
+    }
 }
