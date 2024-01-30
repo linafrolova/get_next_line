@@ -30,13 +30,12 @@ typedef struct s_buffer
 
 char	    *ft_strdup(const char *s);
 char	    *ft_strchr(const char *s, int c);
-t_buffer	*find_last_node(t_buffer *list);
 int	        len_to_newline(t_buffer *list);
 void	    copy_str(t_buffer *list, char *str);
-
+int found_newline(t_buffer *list);
 void        create_list(t_buffer **list, int fd);
 char	    *get_line(t_buffer *list);
-
+t_buffer	*find_last_node(t_buffer *list);
 void deallocate_list(t_buffer **list, t_buffer *last_node);
 char        *get_next_line(int fd);
 void	polish_list(t_buffer **list);

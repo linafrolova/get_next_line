@@ -80,6 +80,7 @@ int	len_to_newline(t_buffer *list)
 	return (len);
 }
 
+
 void	copy_str(t_buffer *list, char *str)
 {
 	int	i;
