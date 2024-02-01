@@ -100,21 +100,21 @@ void deallocate_list(t_buffer **list, t_buffer *last_node)
     }
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-    static t_buffer *list = NULL;
-    char *next_line;
-    t_buffer *last_node;
+	static t_buffer	*list;
+	char			*next_line;
+	t_buffer		*last_node;
 
-    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
-        return (NULL);
-    create_list(&list, fd);
-    if (list == NULL)
-        return NULL;
-    last_node = list;
-    while (last_node->next)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (NULL);
+	create_list(&list, fd);
+	if (list == NULL)
+		return (NULL);
+	last_node = list;
+	while (last_node->next)
 		last_node = last_node->next;
-    next_line = fetch_line(list);
-    deallocate_list(&list, last_node);
-    return (next_line);
+	next_line = fetch_line(list);
+	deallocate_list(&list, last_node);
+	return (next_line);
 }
