@@ -35,7 +35,7 @@ void create_list(t_buffer **list, int fd)
     }
 }
 
-char	*get_line(t_buffer *list)
+char	*fetch_line(t_buffer *list)
 {
 	int		str_len;
 	char	*next_str;
@@ -114,7 +114,7 @@ char *get_next_line(int fd)
     last_node = list;
     while (last_node->next)
 		last_node = last_node->next;
-    next_line = get_line(list);
+    next_line = fetch_line(list);
     deallocate_list(&list, last_node);
     return (next_line);
 }
