@@ -105,9 +105,19 @@ char	*get_next_line(int fd)
 	static t_buffer	*list;
 	char			*next_line;
 	t_buffer		*last_node;
+	t_buffer		*next;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		while (list != NULL)
+		{
+			next = list->next;
+			free(list->content);
+			free(list);
+			list = next;
+		}
 		return (NULL);
+	}
 	create_list(&list, fd);
 	if (list == NULL)
 		return (NULL);
